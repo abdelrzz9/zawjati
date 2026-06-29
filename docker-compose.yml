@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/prompts:/app/prompts
+    environment:
+      - DATABASE_URL=sqlite:///data/zawjati.db
+      - LLM_API_KEY=${LLM_API_KEY}
+    restart: unless-stopped
+
+  # Optional: PostgreSQL for production
+  # db:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_DB: zawjati
+  #     POSTGRES_USER: zawjati
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+# volumes:
+#   pgdata:
