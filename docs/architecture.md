@@ -2,34 +2,42 @@
 
 ## Overview
 
-Zawjati follows a client-server architecture with a RESTful/WebSocket API.
-
 ```
-┌──────────────┐     ┌──────────────┐     ┌──────────┐
-│  Frontend    │────▶│   Backend    │────▶│   LLM    │
-│ (Mobile/Web) │◀────│   (FastAPI)  │◀────│  (API)   │
-└──────────────┘     └──────┬───────┘     └──────────┘
-                            │
-                    ┌───────┴───────┐
-                    │   Memory DB   │
-                    │  (SQLite/PG)  │
-                    └───────────────┘
+┌─────────────┐     ┌─────────────────────┐     ┌──────────────┐
+│  Client      │────▶│   FastAPI Server    │────▶│  LLM Provider │
+│ (App/Web)    │◀────│   (app.main)        │◀────│  (OpenAI/...) │
+└─────────────┘     └──────────┬──────────┘     └──────────────┘
+                               │
+                    ┌──────────┴──────────┐
+                    │    Core Engine      │
+                    │  (framework-agnostic)│
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                 │
+     ┌────────┴──────┐ ┌──────┴──────┐ ┌───────┴───────┐
+     │  Prompt Builder│ │   Memory    │ │  Tool Registry│
+     │  (composable)  │ │  (4 layers) │ │  (extensible) │
+     └───────────────┘ └─────────────┘ └───────────────┘
 ```
 
-## Backend
+Directory structure.
 
-- **Framework**: FastAPI (Python)
-- **LLM Integration**: OpenAI / Anthropic / Local models
-- **Memory**: SQLite for local, PostgreSQL for cloud
-- **Speech**: Whisper (STT), ElevenLabs / Edge TTS
+## Request Flow
 
-## Frontend
+1. **Receive** — FastAPI endpoint receives ChatRequest (JSON, SSE, or WebSocket)
+2. **Retrieve** — RetrievalPipeline fetches conversation history + relevant memories
+3. **Build** — PromptBuilder composes system prompt from base + safety + personality + context + memories + summary
+4. **Generate** — LLMProvider generates response with optional tool calling
+5. **Execute** — Tool calls are executed via ToolRegistry
+6. **Extract** — Memory extraction parses structured memory markers from the response
+7. **Store** — New memories are persisted to SemanticMemory / EpisodicMemory
+8. **Respond** — Response is returned to the client with metrics
 
-- **Mobile**: React Native or Flutter
-- **Web**: React / Next.js
+## Key Principles
 
-## Key Design Decisions
-
-- Prompts are versioned and stored as markdown in `backend/prompts/`
-- Memory is tiered: conversation (short-term) → preferences (long-term)
-- Personality switching via prompt composition
+- **Core is framework-agnostic** — `app/core/` has zero FastAPI imports; swap frameworks easily
+- **Provider-agnostic LLM** — switch providers via `LLM_PROVIDER` env var
+- **Composable prompts** — each section is independently replaceable
+- **Memory-aware** — ranked retrieval with recency and confidence scoring
+- **Observable** — every request logs latency, tokens, cost, timing breakdown

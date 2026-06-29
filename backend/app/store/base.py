@@ -21,5 +21,21 @@ class MemoryStore(ABC):
         ...
 
     @abstractmethod
+    async def get_by_id(self, user_id: str, memory_id: str) -> Optional[MemoryEntry]:
+        ...
+
+    @abstractmethod
+    async def update(self, user_id: str, entry: MemoryEntry):
+        ...
+
+    @abstractmethod
+    async def delete(self, user_id: str, memory_id: str):
+        ...
+
+    @abstractmethod
     async def clear(self, user_id: str):
+        ...
+
+    @abstractmethod
+    async def get_all(self, user_id: str) -> list[MemoryEntry]:
         ...

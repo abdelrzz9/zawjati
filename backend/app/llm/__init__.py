@@ -1,4 +1,4 @@
-from .base import LLMProvider, LLMResponse
+from .base import LLMProvider, LLMProviderError, RateLimitError
 from .openai import OpenAIProvider
 from .ollama import OllamaProvider
 from ..config import settings

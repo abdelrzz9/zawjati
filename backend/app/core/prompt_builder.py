@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 from typing import Optional
+from ..config import settings
 
 PROMPTS_DIR = Path(__file__).parent.parent.parent / "prompts"
 
@@ -56,7 +57,26 @@ class PromptBuilder:
         if conversation_summary:
             sections.append(f"# Conversation Summary\n{conversation_summary}")
 
+        sections.append(
+            "# Memory Extraction\n"
+            "If the user shares something you should remember "
+            "(preferences, goals, personal facts, relationships, events), "
+            "end your response with:\n"
+            "---MEMORY: <type> | <content> | importance=<1-10> | confidence=<0-1>"
+        )
+
         return "\n\n".join(sections)
+
+    def estimate_tokens(self, text: str) -> int:
+        return len(text) // 4
+
+    def trim_to_fit(self, prompt: str, max_tokens: int = 8000) -> str:
+        estimated = self.estimate_tokens(prompt)
+        if estimated <= max_tokens:
+            return prompt
+        ratio = max_tokens / estimated
+        cutoff = int(len(prompt) * ratio)
+        return prompt[:cutoff] + "\n\n[Content truncated to fit context window...]"
 
     def reload(self):
         self._cache.clear()

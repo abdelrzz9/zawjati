@@ -4,24 +4,29 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8000:8000"
+      - "${PORT:-8000}:8000"
     volumes:
-      - ./backend:/app
-      - ./backend/prompts:/app/prompts
+      - ./backend/prompts:/app/prompts:ro
+      - data:/app/data
     environment:
-      - DATABASE_URL=sqlite:///data/zawjati.db
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///data/zawjati.db}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-60}
+      - STREAMING_ENABLED=${STREAMING_ENABLED:-true}
+      - ENABLE_TOOL_CALLING=${ENABLE_TOOL_CALLING:-true}
+      - ENABLE_MEMORY=${ENABLE_MEMORY:-true}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import http.client; c = http.client.HTTPConnection('localhost', 8000); c.request('GET', '/health'); r = c.getresponse(); exit(0 if r.status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
-  # Optional: PostgreSQL for production
-  # db:
-  #   image: postgres:16
-  #   environment:
-  #     POSTGRES_DB: zawjati
-  #     POSTGRES_USER: zawjati
-  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-
-# volumes:
-#   pgdata:
+volumes:
+  data:

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
+import re
 
 
 class BaseTool(ABC):
@@ -20,3 +21,10 @@ class BaseTool(ABC):
                 "parameters": self.parameters,
             },
         }
+
+    def sanitize_output(self, output: str) -> str:
+        if not output:
+            return ""
+        output = re.sub(r"[<>]", "", output)
+        output = re.sub(r"\s+", " ", output).strip()
+        return output[:1000]

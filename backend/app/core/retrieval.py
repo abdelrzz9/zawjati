@@ -2,6 +2,8 @@ from typing import Optional
 from ..store.base import MemoryStore
 from ..store.conversation import ConversationStore
 from ..store.profile import ProfileStore
+from ..models import MemoryEntry
+from ..observability.logger import timer
 
 
 class RetrievalPipeline:
@@ -18,29 +20,41 @@ class RetrievalPipeline:
         self.profile = profile_store
 
     async def retrieve(self, user_id: str, query: str) -> dict:
-        history = self.conversation.get_history(user_id, limit=50)
+        with timer() as conv_t:
+            history = self.conversation.get_history(user_id, limit=50)
 
-        episodic = await self.episodic.query(user_id, query, limit=5)
-        semantic = await self.semantic.query(user_id, query, limit=10)
+        with timer() as epi_t:
+            episodic = await self.episodic.query(user_id, query, limit=5)
 
-        episodic.sort(key=lambda e: e.importance, reverse=True)
-        semantic.sort(key=lambda e: e.importance, reverse=True)
+        with timer() as sem_t:
+            semantic = await self.semantic.query(user_id, query, limit=10)
 
-        profile = await self.profile.get(user_id)
+        with timer() as prof_t:
+            profile = await self.profile.get(user_id)
 
         return {
             "history": history,
             "episodic": episodic,
             "semantic": semantic,
             "profile": profile,
+            "timing_ms": {
+                "conversation": conv_t["elapsed"],
+                "episodic": epi_t["elapsed"],
+                "semantic": sem_t["elapsed"],
+                "profile": prof_t["elapsed"],
+            },
         }
 
     @staticmethod
-    def format_memories(entries: list) -> str:
+    def format_memories(entries: list[MemoryEntry]) -> str:
         if not entries:
             return ""
         lines = []
         for e in entries:
-            prefix = "[IMPORTANT] " if e.importance >= 7 else ""
+            prefix = ""
+            if e.importance >= 8:
+                prefix = "[IMPORTANT] "
+            elif e.confidence >= 0.9:
+                prefix = "[HIGH CONFIDENCE] "
             lines.append(f"- {prefix}{e.content}")
         return "\n".join(lines)
