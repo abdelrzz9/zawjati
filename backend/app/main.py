@@ -1,18 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import settings
-from .llm import create_llm_client
-from .store.conversation import ConversationStore
-from .store.long_term import LongTermMemory
-from .tools import ToolRegistry
-from .chat import ChatService
-from .router import router, create_chat_routes
+from .api.router import router
+from .api.deps import build_orchestrator
 
 app = FastAPI(
     title="Zawjati API",
-    description="AI companion backend",
-    version="0.1.0",
+    description="AI companion platform",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -26,19 +21,23 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
-    llm = create_llm_client()
-    conversation_store = ConversationStore()
-    memory_store = LongTermMemory()
-    tool_registry = ToolRegistry()
-
-    chat_service = ChatService(llm, conversation_store, memory_store, tool_registry)
-    create_chat_routes(chat_service)
-    app.include_router(router)
+    build_orchestrator()
 
 
 @app.get("/")
 async def root():
-    return {"message": "Zawjati API is running"}
+    return {
+        "app": "Zawjati",
+        "version": "0.2.0",
+        "endpoints": {
+            "chat": "POST /api/chat",
+            "chat_stream": "POST /api/chat/stream",
+            "chat_ws": "WS /api/chat/ws",
+            "profile": "GET/POST /api/profile/{user_id}",
+            "personalities": "GET /api/personalities",
+            "metrics": "GET /api/metrics",
+        },
+    }
 
 
 @app.get("/health")
