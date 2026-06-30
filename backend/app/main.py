@@ -11,6 +11,7 @@ from .api.router import router
 from .api.deps import build_orchestrator
 from .llm.base import LLMProviderError, RateLimitError
 from .observability.logger import ObservabilityLogger
+from .middleware import SecurityHeadersMiddleware
 
 logger = ObservabilityLogger("zawjati")
 
@@ -38,6 +39,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(SecurityHeadersMiddleware)
 
 
 @app.middleware("http")

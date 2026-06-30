@@ -91,6 +91,9 @@ class ObservabilityLogger:
     def info(self, msg: str, **extra):
         self.logger.info(msg, extra={"extra": extra})
 
+    def warning(self, msg: str, **extra):
+        self.logger.warning(msg, extra={"extra": extra})
+
     def error(self, msg: str, **extra):
         self.logger.error(msg, extra={"extra": extra})
 

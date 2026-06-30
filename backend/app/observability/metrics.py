@@ -23,33 +23,48 @@ class RequestMetrics:
 
 
 class MetricsCollector:
+    _instance = None
+    _prometheus_initialized = False
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
+        if hasattr(self, '_initialized') and self._initialized:
+            return
+        self._initialized = True
         self._requests: list[RequestMetrics] = []
         self._totals = defaultdict(float)
         self._setup_prometheus()
 
     def _setup_prometheus(self):
-        if not PROMETHEUS_AVAILABLE:
+        if not PROMETHEUS_AVAILABLE or MetricsCollector._prometheus_initialized:
             return
-        self._prom_latency = Histogram(
-            "zawjati_chat_latency_ms", "Chat response latency in ms",
-            buckets=[100, 250, 500, 1000, 2000, 5000, 10000],
-        )
-        self._prom_tokens = Counter(
-            "zawjati_tokens_total", "Total tokens used",
-            ["type"],
-        )
-        self._prom_cost = Counter(
-            "zawjati_cost_total", "Total cost in USD",
-        )
-        self._prom_requests = Counter(
-            "zawjati_requests_total", "Total chat requests",
-            ["model", "provider"],
-        )
-        self._prom_memory_retrieval = Histogram(
-            "zawjati_memory_retrieval_ms", "Memory retrieval latency",
-            buckets=[5, 10, 25, 50, 100, 250, 500],
-        )
+        MetricsCollector._prometheus_initialized = True
+        try:
+            self._prom_latency = Histogram(
+                "zawjati_chat_latency_ms", "Chat response latency in ms",
+                buckets=[100, 250, 500, 1000, 2000, 5000, 10000],
+            )
+            self._prom_tokens = Counter(
+                "zawjati_tokens_total", "Total tokens used",
+                ["type"],
+            )
+            self._prom_cost = Counter(
+                "zawjati_cost_total", "Total cost in USD",
+            )
+            self._prom_requests = Counter(
+                "zawjati_requests_total", "Total chat requests",
+                ["model", "provider"],
+            )
+            self._prom_memory_retrieval = Histogram(
+                "zawjati_memory_retrieval_ms", "Memory retrieval latency",
+                buckets=[5, 10, 25, 50, 100, 250, 500],
+            )
+        except ValueError:
+            pass
 
     def record(self, metrics: RequestMetrics):
         self._requests.append(metrics)
@@ -61,19 +76,25 @@ class MetricsCollector:
         self._totals["latency_ms"] += metrics.latency_ms
 
         if PROMETHEUS_AVAILABLE and hasattr(self, "_prom_latency"):
-            self._prom_latency.observe(metrics.latency_ms)
-            self._prom_tokens.labels(type="prompt").inc(metrics.prompt_tokens)
-            self._prom_tokens.labels(type="completion").inc(metrics.completion_tokens)
-            self._prom_tokens.labels(type="total").inc(metrics.total_tokens)
-            self._prom_cost.inc(metrics.cost)
-            self._prom_requests.labels(
-                model=metrics.model or "unknown",
-                provider=metrics.provider or "unknown",
-            ).inc()
+            try:
+                self._prom_latency.observe(metrics.latency_ms)
+                self._prom_tokens.labels(type="prompt").inc(metrics.prompt_tokens)
+                self._prom_tokens.labels(type="completion").inc(metrics.completion_tokens)
+                self._prom_tokens.labels(type="total").inc(metrics.total_tokens)
+                self._prom_cost.inc(metrics.cost)
+                self._prom_requests.labels(
+                    model=metrics.model or "unknown",
+                    provider=metrics.provider or "unknown",
+                ).inc()
+            except Exception:
+                pass
 
     def get_prometheus_metrics(self) -> Optional[bytes]:
         if PROMETHEUS_AVAILABLE:
-            return generate_latest(REGISTRY)
+            try:
+                return generate_latest(REGISTRY)
+            except Exception:
+                return None
         return None
 
     @property

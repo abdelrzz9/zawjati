@@ -1,0 +1,22 @@
+[project]
+name = "zawjati-backend"
+version = "1.0.0"
+description = "Zawjati AI Companion Backend"
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+strict = false
+ignore_missing_imports = true
+python_version = "3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["../tests"]
+asyncio_mode = "auto"
+pythonpath = ["."]
