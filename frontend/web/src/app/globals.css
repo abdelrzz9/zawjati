@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0eeff;
+  --color-primary-100: #e3e0ff;
+  --color-primary-200: #c9c5ff;
+  --color-primary-300: #a898ff;
+  --color-primary-500: #6e56f8;
+  --color-primary-600: #5b44e0;
+  --color-primary-700: #4a35c4;
+  --color-primary-800: #3e2ea0;
+  --color-primary-900: #352b83;
+  --color-primary-950: #1e1a4a;
+
+  --color-surface-50: #f8f8ff;
+  --color-surface-100: #f0f0f8;
+  --color-surface-200: #e0e0e8;
+  --color-surface-300: #c4c4ce;
+  --color-surface-400: #9a9aa6;
+  --color-surface-500: #6b6b78;
+  --color-surface-600: #4a4a57;
+  --color-surface-700: #33333f;
+  --color-surface-800: #262630;
+  --color-surface-900: #1e1e26;
+  --color-surface-950: #111116;
+
+  --color-dark-bg: #0b0b0f;
+  --color-dark-surface: #16161c;
+  --color-dark-card: #16161c;
+  --color-dark-border: #262630;
+  --color-dark-input: #111116;
+
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #eab308;
+  --color-info: #3b82f6;
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 9999px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark-bg);
+    color: var(--color-neutral-0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  *, *::before, *::after {
+    border-color: var(--color-dark-border);
+  }
+
+  ::selection {
+    background-color: var(--color-primary-500);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-700);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-surface-600);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
