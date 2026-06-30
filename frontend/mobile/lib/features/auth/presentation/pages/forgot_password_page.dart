@@ -144,7 +144,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           borderSide: BorderSide(color: AppThemeColors.error),
         ),
         labelStyle: TextStyle(color: AppThemeColors.hintText),
-        hintStyle: TextStyle(color: AppThemeColors.hintText.withOpacity(0.6)),
+        hintStyle: TextStyle(color: AppThemeColors.hintText.withValues(alpha: 0.6)),
       ),
       validator: AppValidators.validateEmail,
     );

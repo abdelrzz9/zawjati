@@ -52,6 +52,7 @@ class _NavBarItem extends StatelessWidget {
   final VoidCallback onTap;
   final int badgeCount;
 
+  // ignore: unused_element_parameter
   const _NavBarItem({
     required this.icon,
     required this.label,

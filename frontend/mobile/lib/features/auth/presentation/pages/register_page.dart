@@ -302,10 +302,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       padding: EdgeInsets.all(AppThemeMetrics.spacingMd),
       decoration: BoxDecoration(
-        color: AppThemeColors.error.withOpacity(0.1),
+        color: AppThemeColors.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppThemeMetrics.radiusSm),
         border: Border.all(
-          color: AppThemeColors.error.withOpacity(0.3),
+          color: AppThemeColors.error.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -359,7 +359,7 @@ class _RegisterPageState extends State<RegisterPage> {
         borderSide: BorderSide(color: AppThemeColors.error),
       ),
       labelStyle: TextStyle(color: AppThemeColors.hintText),
-      hintStyle: TextStyle(color: AppThemeColors.hintText.withOpacity(0.6)),
+      hintStyle: TextStyle(color: AppThemeColors.hintText.withValues(alpha: 0.6)),
     );
   }
 }

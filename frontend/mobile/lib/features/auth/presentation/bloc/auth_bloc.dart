@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zawjati_mobile/core/usecase/usecase.dart';
-import '../../domain/entities/user.dart';
 import '../../domain/usecases/check_auth_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
@@ -40,8 +39,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
   }
 
   @override
+  // ignore: invalid_use_of_visible_for_testing_member
   void emit(AuthState state) {
     if (!isClosed) {
+      // ignore: invalid_use_of_visible_for_testing_member
       super.emit(state);
       _notifier.notifyListeners();
     }
