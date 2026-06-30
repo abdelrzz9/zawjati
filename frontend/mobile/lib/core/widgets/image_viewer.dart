@@ -8,7 +8,6 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../theme/app_theme_colors.dart';
-import '../theme/app_theme_metrics.dart';
 
 class ZawjatiImageViewer extends StatefulWidget {
   final String imageUrl;

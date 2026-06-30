@@ -12,9 +12,8 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/chat/presentation/bloc/chat_bloc.dart';
 import '../../features/chat/presentation/pages/chat_page.dart';
 import '../../features/memory/presentation/pages/memory_page.dart';
-import '../../features/memory/presentation/pages/memory_detail_page.dart';
+import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/personalities/presentation/pages/personalities_page.dart';
-import '../../features/personalities/presentation/pages/personality_detail_page.dart';
 import '../../features/personalities/presentation/pages/personality_create_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/profile_edit_page.dart';
@@ -29,7 +28,6 @@ import '../../features/settings/presentation/pages/settings_developer_page.dart'
 import '../../features/settings/presentation/pages/settings_accessibility_page.dart';
 import '../../features/voice/presentation/pages/voice_page.dart';
 import '../../features/documents/presentation/pages/documents_page.dart';
-import '../../features/documents/presentation/pages/document_detail_page.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/developer/presentation/pages/developer_page.dart';

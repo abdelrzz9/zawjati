@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
-import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/features/profile/domain/entities/profile.dart';
 import 'package:zawjati_mobile/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:zawjati_mobile/features/profile/domain/usecases/update_profile_usecase.dart';

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
-import 'package:meta/meta.dart';
 
 enum WebSocketConnectionState { disconnected, connecting, connected, reconnecting }
 
@@ -103,7 +102,7 @@ class WebSocketService {
     try {
       final uri = Uri.parse(url).replace(queryParameters: {
         if (headers != null) ...headers,
-        if (_sessionId != null) 'session_id': _sessionId,
+        ?'session_id': _sessionId,
       });
 
       _channel = WebSocketChannel.connect(uri);
