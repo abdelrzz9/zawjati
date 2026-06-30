@@ -26,4 +26,12 @@ class AppColors {
   static const Color darkSubtitle = Color(0xFFA1A1AA);
   static const Color darkCard = Color(0xFF18181B);
   static const Color darkBorder = Color(0xFF27272A);
+
+  // AMOLED theme
+  static const Color amoledSurface = Color(0xFF000000);
+  static const Color amoledBackground = Color(0xFF000000);
+  static const Color amoledText = Color(0xFFFAFAFA);
+  static const Color amoledSubtitle = Color(0xFFA1A1AA);
+  static const Color amoledCard = Color(0xFF0A0A0A);
+  static const Color amoledBorder = Color(0xFF1A1A1A);
 }

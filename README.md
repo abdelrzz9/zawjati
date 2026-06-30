@@ -1,9 +1,9 @@
 # Zawjati — AI Companion Platform
 
-[![CI](https://github.com/yourusername/zawjati/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/zawjati/actions/workflows/ci.yml)
-[![Release](https://github.com/yourusername/zawjati/actions/workflows/release.yml/badge.svg)](https://github.com/yourusername/zawjati/actions/workflows/release.yml)
+[![CI](https://github.com/abdelrzz9/zawjati/actions/workflows/ci.yml/badge.svg)](https://github.com/abdelrzz9/zawjati/actions/workflows/ci.yml)
+[![Release](https://github.com/abdelrzz9/zawjati/actions/workflows/release.yml/badge.svg)](https://github.com/abdelrzz9/zawjati/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![codecov](https://codecov.io/gh/yourusername/zawjati/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/zawjati)
+[![codecov](https://codecov.io/gh/abdelrzz9/zawjati/branch/main/graph/badge.svg)](https://codecov.io/gh/abdelrzz9/zawjati)
 
 Zawjati is an intelligent AI companion platform that learns from every conversation. It features a modular architecture supporting multiple LLM providers, a sophisticated memory system, personality customization, and cross-platform frontends.
 

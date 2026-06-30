@@ -46,7 +46,7 @@ class OfflineQueueItem {
 class OfflineQueue {
   final SharedPreferences _prefs;
   final InternetConnection _connectivity;
-  final StreamSubscription<InternetStatus>? _subscription;
+  late final StreamSubscription<InternetStatus>? _subscription;
   final List<OfflineQueueItem> _queue = [];
   bool _isProcessing = false;
   int _maxRetries = 5;
@@ -69,12 +69,12 @@ class OfflineQueue {
     required SharedPreferences prefs,
     required InternetConnection connectivity,
   })  : _prefs = prefs,
-        _connectivity = connectivity,
-        _subscription = connectivity.onStatusChange.listen((status) {
-          if (status == InternetStatus.connected) {
-            processQueue();
-          }
-        }) {
+        _connectivity = connectivity {
+    _subscription = connectivity.onStatusChange.listen((status) {
+      if (status == InternetStatus.connected) {
+        processQueue();
+      }
+    });
     _loadQueue();
   }
 

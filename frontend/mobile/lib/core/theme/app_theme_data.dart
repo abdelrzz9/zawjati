@@ -29,6 +29,18 @@ class AppThemeData {
     errorColor: AppColors.error,
   );
 
+  static ThemeData get amoledTheme => _buildTheme(
+    brightness: Brightness.dark,
+    primaryColor: AppColors.primary,
+    surfaceColor: AppColors.amoledSurface,
+    backgroundColor: AppColors.amoledBackground,
+    textColor: AppColors.amoledText,
+    subtitleColor: AppColors.amoledSubtitle,
+    cardColor: AppColors.amoledCard,
+    borderColor: AppColors.amoledBorder,
+    errorColor: AppColors.error,
+  );
+
   static ThemeData _buildTheme({
     required Brightness brightness,
     required Color primaryColor,
