@@ -221,6 +221,75 @@ class DioClient {
     _dio.options.baseUrl = url;
   }
 
+  Future<Response<ResponseBody>> postStream(
+    String endpoint, {
+    dynamic data,
+    bool requiresAuth = false,
+  }) async {
+    return _executeStreamWithAuth(
+      () => _dio.post(
+        endpoint,
+        data: data,
+        options: Options(
+          responseType: ResponseType.stream,
+          headers: _buildOptions(requiresAuth).headers,
+        ),
+      ),
+      requiresAuth,
+    );
+  }
+
+  Future<Response<ResponseBody>> getStream(
+    String endpoint, {
+    bool requiresAuth = false,
+  }) async {
+    return _executeStreamWithAuth(
+      () => _dio.get(
+        endpoint,
+        options: Options(
+          responseType: ResponseType.stream,
+          headers: _buildOptions(requiresAuth).headers,
+        ),
+      ),
+      requiresAuth,
+    );
+  }
+
+  Future<Response<ResponseBody>> _executeStreamWithAuth(
+    Future<Response<ResponseBody>> Function() request,
+    bool requiresAuth,
+  ) async {
+    try {
+      if (requiresAuth && getAccessToken != null) {
+        final token = getAccessToken!();
+        if (token == null && onTokenRefresh != null) {
+          final newToken = await onTokenRefresh!();
+          if (newToken == null) {
+            onUnauthorized?.call();
+            throw const UnauthorizedFailure('Session expired');
+          }
+        }
+      }
+      return await request();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401 && requiresAuth) {
+        if (onTokenRefresh != null) {
+          try {
+            final newToken = await onTokenRefresh!();
+            if (newToken != null) {
+              return await request();
+            }
+          } catch (_) {}
+        }
+        onUnauthorized?.call();
+        throw const UnauthorizedFailure(
+          'Session expired. Please log in again.',
+        );
+      }
+      throw _convertDioException(e);
+    }
+  }
+
   void dispose() {
     _dio.close();
   }

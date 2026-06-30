@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:multai_mobile/core/theme/app_theme_metrics.dart';
+import '/core/theme/app_theme_metrics.dart';
 import 'context_extensions.dart';
 
 extension ResponsiveX on BuildContext {

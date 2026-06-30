@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants/nav_items.dart';
-import 'package:multai_mobile/core/theme/app_theme_colors.dart';
-import 'package:multai_mobile/core/theme/app_theme_metrics.dart';
-import '../../features/notifications/presentation/bloc/notifications_bloc.dart';
+import '../theme/app_theme_colors.dart';
+import '../theme/app_theme_metrics.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final String currentRoute;
@@ -32,23 +30,6 @@ class AppBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: navItems.map((data) {
               final isSelected = currentRoute.startsWith(data.route);
-
-              if (data.item == NavItem.notifications) {
-                return BlocBuilder<NotificationBloc, NotificationState>(
-                  builder: (context, state) {
-                    final unread = state is NotificationLoaded
-                        ? state.unreadCount
-                        : 0;
-                    return _NavBarItem(
-                      icon: data.icon,
-                      label: data.label,
-                      isSelected: isSelected,
-                      badgeCount: unread,
-                      onTap: () => context.go(data.route),
-                    );
-                  },
-                );
-              }
 
               return _NavBarItem(
                 icon: data.icon,

@@ -1,121 +1,152 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'injection.dart' as di;
+import 'core/theme/app_theme_data.dart';
+import 'core/router/app_router.dart';
+import 'core/constants/storage_keys.dart';
+import 'core/security/env_validator.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/settings/presentation/bloc/settings_bloc.dart';
+import 'core/network/dio_client.dart';
+import 'core/storage/app_local_storage.dart';
+import 'core/errors/logger.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (_) {}
+
+  EnvValidator.validateProduction();
+
+  await Hive.initFlutter();
+
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {}
+
+  await di.initDependencies();
+
+  final localStorage = di.sl<LocalStorage>();
+
+  final themeMode = _loadThemeMode(localStorage);
+  final locale = _loadLocale(localStorage);
+
+  runApp(ZawjatiApp(
+    themeMode: themeMode,
+    locale: locale,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+ThemeMode _loadThemeMode(LocalStorage storage) {
+  final saved = storage.getString(StorageKeys.themeMode);
+  switch (saved) {
+    case 'light':
+      return ThemeMode.light;
+    case 'dark':
+      return ThemeMode.dark;
+    case 'amoled':
+      return ThemeMode.dark;
+    default:
+      return ThemeMode.system;
+  }
+}
 
-  // This widget is the root of your application.
+Locale _loadLocale(LocalStorage storage) {
+  final saved = storage.getString(StorageKeys.language);
+  return saved != null ? Locale(saved) : const Locale('en');
+}
+
+class ZawjatiApp extends StatefulWidget {
+  final ThemeMode themeMode;
+  final Locale locale;
+
+  const ZawjatiApp({
+    super.key,
+    required this.themeMode,
+    required this.locale,
+  });
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  State<ZawjatiApp> createState() => _ZawjatiAppState();
+
+  static _ZawjatiAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_ZawjatiAppState>()!;
+}
+
+class _ZawjatiAppState extends State<ZawjatiApp> {
+  late ThemeMode _themeMode;
+  late Locale _locale;
+  late AuthBloc _authBloc;
+  late GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _themeMode = widget.themeMode;
+    _locale = widget.locale;
+    _authBloc = di.sl<AuthBloc>();
+    _router = appRouter(_authBloc);
+    _authBloc.add(const AuthCheckRequested());
+  }
+
+  @override
+  void dispose() {
+    _authBloc.close();
+    super.dispose();
+  }
+
+  void setThemeMode(ThemeMode mode) {
+    setState(() => _themeMode = mode);
+    di.sl<LocalStorage>().setString(
+      StorageKeys.themeMode,
+      mode.name,
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void setLocale(Locale locale) {
+    setState(() => _locale = locale);
+    di.sl<LocalStorage>().setString(
+      StorageKeys.language,
+      locale.languageCode,
+    );
   }
+
+  ThemeMode get themeMode => _themeMode;
+  Locale get locale => _locale;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _authBloc),
+        BlocProvider(create: (_) => di.sl<SettingsBloc>()),
+      ],
+      child: MaterialApp.router(
+        title: 'Zawjati',
+        debugShowCheckedModeBanner: false,
+        theme: AppThemeData.lightTheme,
+        darkTheme: AppThemeData.darkTheme,
+        themeMode: _themeMode,
+        locale: _locale,
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ar'),
+          Locale('fr'),
+        ],
+        routerConfig: _router,
+        builder: (context, child) {
+          return MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.3,
+            child: child!,
+          );
+        },
       ),
     );
   }

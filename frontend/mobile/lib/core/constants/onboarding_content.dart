@@ -2,13 +2,11 @@ import 'images.dart';
 
 class OnboardingSlide {
   final String image;
-  final String? secondImage;
   final String title;
   final String description;
 
   const OnboardingSlide({
     required this.image,
-    this.secondImage,
     required this.title,
     required this.description,
   });
@@ -17,19 +15,20 @@ class OnboardingSlide {
 const List<OnboardingSlide> onboardingSlides = [
   OnboardingSlide(
     image: AppImages.onboarding1,
-    title: 'Your events,\ncaptured.',
+    title: 'Your AI Companion',
     description:
-        'Join Micro Club events — our team captures every moment for you.',
+        'Meet your intelligent companion who learns from every conversation and adapts to your personality.',
   ),
   OnboardingSlide(
     image: AppImages.onboarding2,
-    secondImage: AppImages.onboarding3,
-    title: 'Found\nautomatically.',
-    description: 'Our AI finds your face across every photo from every event.',
+    title: 'Remembers Everything',
+    description:
+        'Zawjati remembers your preferences, goals, and important life events to provide personalized conversations.',
   ),
   OnboardingSlide(
     image: AppImages.onboarding3,
-    title: 'Keep your\nmoments.',
-    description: 'View, approve and download your photos whenever you want.',
+    title: 'Privacy First',
+    description:
+        'Your data is encrypted and private. You control what is remembered and can delete anything anytime.',
   ),
 ];

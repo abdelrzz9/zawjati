@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:multai_mobile/core/errors/app_exception.dart';
-import 'package:multai_mobile/core/errors/error_handler.dart';
-import 'package:multai_mobile/core/theme/app_theme_metrics.dart';
+import '../errors/app_exception.dart';
+import '../errors/error_handler.dart';
+import '../theme/app_theme_metrics.dart';
 
 extension SnackBarX on BuildContext {
   void showErrorSnackBar(String message) {
