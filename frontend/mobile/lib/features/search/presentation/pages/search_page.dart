@@ -141,7 +141,7 @@ class _ResultList extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.all(AppThemeMetrics.spacingMd),
       itemCount: items.length,
-      separatorBuilder: (_, __) => const Divider(),
+      separatorBuilder: (_, _) => const Divider(),
       itemBuilder: (context, index) {
         final item = items[index];
         return ListTile(

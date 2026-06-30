@@ -1,11 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:dartz/dartz.dart';
-import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/features/chat/data/datasources/chat_remote_datasource.dart';
 import 'package:zawjati_mobile/features/chat/data/repositories/chat_repository_impl.dart';
-import 'package:zawjati_mobile/features/chat/domain/entities/chat_message.dart';
-import 'package:zawjati_mobile/features/chat/domain/entities/chat_conversation.dart';
 import 'package:zawjati_mobile/features/chat/data/models/chat_request_model.dart';
 import 'package:zawjati_mobile/features/chat/data/models/chat_response_model.dart';
 import 'package:zawjati_mobile/features/chat/data/models/chat_conversation_model.dart';

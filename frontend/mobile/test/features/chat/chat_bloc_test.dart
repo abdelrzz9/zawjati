@@ -120,15 +120,17 @@ void main() {
       ],
     );
 
+    late StreamController<Either<Failure, String>> streamController;
     blocTest<ChatBloc, ChatState>(
       'sets up streaming state on StreamMessageEvent',
       build: () {
-        final controller = StreamController<Either<Failure, String>>();
+        streamController = StreamController<Either<Failure, String>>();
         when(() => mockGetConversations(any()))
             .thenAnswer((_) async => Right([testConversation]));
-        when(() => mockStreamMessage(any())).thenAnswer((_) => controller.stream);
+        when(() => mockStreamMessage(any())).thenAnswer((_) => streamController.stream);
         return chatBloc;
       },
+      tearDown: () => streamController.close(),
       seed: () => ChatLoaded(
         conversations: [testConversation],
         messages: [],

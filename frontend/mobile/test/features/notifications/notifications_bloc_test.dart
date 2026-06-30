@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
+import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/core/usecase/usecase.dart';
 import 'package:zawjati_mobile/features/notifications/domain/entities/app_notification.dart';
 import 'package:zawjati_mobile/features/notifications/domain/usecases/get_notifications_usecase.dart';
@@ -65,7 +66,7 @@ void main() {
       'marks as read',
       build: () {
         when(() => mockMark(any()))
-            .thenAnswer((_) async => const Right('notif-1'));
+            .thenAnswer((_) async => Right<Failure, void>(null));
         return bloc;
       },
       seed: () => NotificationsLoaded(
@@ -73,7 +74,7 @@ void main() {
         unreadCount: 1,
         totalUnread: 1,
       ),
-      act: (b) => b.add(MarkRead('notif-1')),
+      act: (b) { b.add(MarkRead('notif-1')); },
       expect: () => [
         isA<NotificationsLoaded>().having(
           (s) => s.notifications.first.read,

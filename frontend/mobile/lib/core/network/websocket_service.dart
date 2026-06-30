@@ -101,7 +101,7 @@ class WebSocketService {
 
     try {
       final uri = Uri.parse(url).replace(queryParameters: {
-        if (headers != null) ...headers,
+        ...?headers,
         if (_sessionId != null) 'session_id': _sessionId,
       });
 

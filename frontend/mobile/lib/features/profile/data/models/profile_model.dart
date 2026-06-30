@@ -19,6 +19,7 @@ class ProfileModel extends UserProfile {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,

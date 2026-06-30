@@ -119,7 +119,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 vertical: AppThemeMetrics.spacingSm,
               ),
               itemCount: state.notifications.length,
-              separatorBuilder: (_, __) => const SizedBox(height: AppThemeMetrics.spacingSm),
+              separatorBuilder: (_, _) => const SizedBox(height: AppThemeMetrics.spacingSm),
               itemBuilder: (context, index) {
                 final notification = state.notifications[index];
                 final timeStr = _formatTime(notification.createdAt);

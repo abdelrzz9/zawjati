@@ -3,6 +3,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 import 'package:zawjati_mobile/core/usecase/usecase.dart';
+import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/features/settings/domain/usecases/get_settings_usecase.dart';
 import 'package:zawjati_mobile/features/settings/domain/usecases/update_setting_usecase.dart';
 import 'package:zawjati_mobile/features/settings/presentation/bloc/settings_bloc.dart';
@@ -58,11 +59,11 @@ void main() {
       'updates setting value',
       build: () {
         when(() => mockUpdateSetting(any()))
-            .thenAnswer((_) async => const Right(true));
+            .thenAnswer((_) async => Right<Failure, void>(null));
         return settingsBloc;
       },
       seed: () => SettingsLoaded(testSettings),
-      act: (bloc) => bloc.add(const UpdateSetting(key: 'themeMode', value: 'light')),
+      act: (bloc) { bloc.add(const UpdateSetting(key: 'themeMode', value: 'light')); },
       expect: () => [
         isA<SettingsLoaded>().having(
           (s) => s.settings.themeMode,

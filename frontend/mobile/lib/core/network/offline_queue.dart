@@ -49,7 +49,7 @@ class OfflineQueue {
   late final StreamSubscription<InternetStatus>? _subscription;
   final List<OfflineQueueItem> _queue = [];
   bool _isProcessing = false;
-  int _maxRetries = 5;
+  final int _maxRetries = 5;
 
   final StreamController<OfflineQueueItem> _itemAddedController =
       StreamController<OfflineQueueItem>.broadcast();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zawjati_mobile/core/theme/app_theme_metrics.dart';
 import 'package:zawjati_mobile/core/theme/theme.dart';
 
 class PersonalityCreatePage extends StatefulWidget {

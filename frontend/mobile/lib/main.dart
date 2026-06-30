@@ -12,9 +12,7 @@ import 'core/security/env_validator.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/settings/presentation/bloc/settings_bloc.dart';
-import 'core/network/dio_client.dart';
 import 'core/storage/app_local_storage.dart';
-import 'core/errors/logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,13 +72,13 @@ class ZawjatiApp extends StatefulWidget {
   });
 
   @override
-  State<ZawjatiApp> createState() => _ZawjatiAppState();
+  State<ZawjatiApp> createState() => ZawjatiAppState();
 
-  static _ZawjatiAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_ZawjatiAppState>()!;
+  static ZawjatiAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<ZawjatiAppState>()!;
 }
 
-class _ZawjatiAppState extends State<ZawjatiApp> {
+class ZawjatiAppState extends State<ZawjatiApp> {
   late ThemeMode _themeMode;
   late Locale _locale;
   late AuthBloc _authBloc;

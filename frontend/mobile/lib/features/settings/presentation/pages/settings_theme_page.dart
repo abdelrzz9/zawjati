@@ -18,38 +18,34 @@ class SettingsThemePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             final current = state.settings.themeMode;
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                RadioListTile<String>(
-                  title: const Text('System'),
-                  secondary: const Icon(Icons.phone_android_outlined),
-                  value: 'system',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('Light'),
-                  secondary: const Icon(Icons.light_mode_outlined),
-                  value: 'light',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('Dark'),
-                  secondary: const Icon(Icons.dark_mode_outlined),
-                  value: 'dark',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('AMOLED'),
-                  secondary: const Icon(Icons.contrast_outlined),
-                  value: 'amoled',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-              ],
+            return RadioGroup<String>(
+              groupValue: current,
+              onChanged: (v) => _updateAndPop(context, v!),
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  RadioListTile<String>(
+                    title: const Text('System'),
+                    secondary: const Icon(Icons.phone_android_outlined),
+                    value: 'system',
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Light'),
+                    secondary: const Icon(Icons.light_mode_outlined),
+                    value: 'light',
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Dark'),
+                    secondary: const Icon(Icons.dark_mode_outlined),
+                    value: 'dark',
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('AMOLED'),
+                    secondary: const Icon(Icons.contrast_outlined),
+                    value: 'amoled',
+                  ),
+                ],
+              ),
             );
           },
         ),

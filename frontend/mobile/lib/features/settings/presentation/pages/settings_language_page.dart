@@ -18,31 +18,29 @@ class SettingsLanguagePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             final current = state.settings.language;
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                RadioListTile<String>(
-                  title: const Text('English'),
-                  subtitle: const Text('English'),
-                  value: 'en',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('العربية'),
-                  subtitle: const Text('Arabic'),
-                  value: 'ar',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-                RadioListTile<String>(
-                  title: const Text('Français'),
-                  subtitle: const Text('French'),
-                  value: 'fr',
-                  groupValue: current,
-                  onChanged: (v) => _updateAndPop(context, v!),
-                ),
-              ],
+            return RadioGroup<String>(
+              groupValue: current,
+              onChanged: (v) => _updateAndPop(context, v!),
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  RadioListTile<String>(
+                    title: const Text('English'),
+                    subtitle: const Text('English'),
+                    value: 'en',
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('العربية'),
+                    subtitle: const Text('Arabic'),
+                    value: 'ar',
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('Français'),
+                    subtitle: const Text('French'),
+                    value: 'fr',
+                  ),
+                ],
+              ),
             );
           },
         ),

@@ -100,7 +100,7 @@ class _SlideContent extends StatelessWidget {
                 slide.image,
                 height: 280,
                 fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => Icon(
+                errorBuilder: (_, _, _) => Icon(
                   Icons.auto_awesome,
                   size: 120,
                   color: AppThemeColors.primaryAccent.withValues(alpha: 0.5),

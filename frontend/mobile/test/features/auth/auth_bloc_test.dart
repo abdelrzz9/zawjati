@@ -111,10 +111,10 @@ void main() {
       'emits Unauthenticated when logout succeeds',
       build: () {
         when(() => mockLogout(any()))
-            .thenAnswer((_) async => const Right(true));
+            .thenAnswer((_) async => Right<Failure, void>(null));
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LogoutRequested()),
+      act: (bloc) { bloc.add(const LogoutRequested()); },
       expect: () => [
         const AuthLoading(),
         isA<AuthUnauthenticated>(),

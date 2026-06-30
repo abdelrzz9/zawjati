@@ -164,7 +164,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                           AppThemeMetrics.spacingXxl * 2,
                         ),
                         itemCount: filtered.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: AppThemeMetrics.spacingSm),
+                        separatorBuilder: (_, _) => const SizedBox(height: AppThemeMetrics.spacingSm),
                         itemBuilder: (context, index) {
                           final doc = filtered[index];
                           return DocumentCard(
@@ -217,7 +217,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final result = await UploadDialog.show(context);
-          if (result != null && mounted) {
+          if (result != null && context.mounted) {
             context.read<DocumentsBloc>().add(UploadDocument(
               filePath: result['path']!,
               filename: result['name']!,

@@ -28,7 +28,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
     on<RegisterRequested>(_onRegisterRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<AuthUserChanged>(_onUserChanged);
-    _stateSubscription = stream.listen((_) => _notifier.notifyListeners());
+    _stateSubscription = stream.listen((_) {
+      // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+      _notifier.notifyListeners();
+    });
   }
 
   @override

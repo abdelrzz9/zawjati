@@ -84,11 +84,11 @@ void main() {
       'removes memory on DeleteMemory',
       build: () {
         when(() => mockDeleteMemory(any()))
-            .thenAnswer((_) async => const Right('mem-1'));
+            .thenAnswer((_) async => Right<Failure, void>(null));
         return memoryBloc;
       },
       seed: () => MemoryLoaded(memories: testMemories),
-      act: (bloc) => bloc.add(const DeleteMemory(id: 'mem-1')),
+      act: (bloc) { bloc.add(const DeleteMemory(id: 'mem-1')); },
       expect: () => [
         isA<MemoryLoaded>().having(
           (s) => s.memories.length,
