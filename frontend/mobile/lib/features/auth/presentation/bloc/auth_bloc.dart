@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zawjati_mobile/core/usecase/usecase.dart';
@@ -14,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
   final LogoutUseCase logoutUseCase;
   final CheckAuthUseCase checkAuthUseCase;
   final ChangeNotifier _notifier = ChangeNotifier();
+  StreamSubscription<AuthState>? _stateSubscription;
 
   AuthBloc({
     required this.loginUseCase,
@@ -26,6 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
     on<RegisterRequested>(_onRegisterRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<AuthUserChanged>(_onUserChanged);
+    _stateSubscription = stream.listen((_) => _notifier.notifyListeners());
   }
 
   @override
@@ -39,13 +42,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
   }
 
   @override
-  // ignore: invalid_use_of_visible_for_testing_member
-  void emit(AuthState state) {
-    if (!isClosed) {
-      super.emit(state);
-      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-      _notifier.notifyListeners();
-    }
+  Future<void> close() {
+    _stateSubscription?.cancel();
+    return super.close();
   }
 
   Future<void> _onCheckRequested(
