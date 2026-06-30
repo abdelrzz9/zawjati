@@ -1,0 +1,17 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Security-critical lints
+    - avoid_print
+    - no_runtimeType_toString
+    - use_build_context_synchronously
+    - avoid_empty_else
+    - await_only_futures
+    - cancel_subscriptions
+    - close_sinks
+    - empty_statements
+    - exhaustive_cases
+    - no_duplicate_case_values
+    - unnecessary_overrides
+    - void_checks
