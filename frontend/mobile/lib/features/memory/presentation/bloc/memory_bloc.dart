@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/features/memory/domain/entities/memory.dart';
 import 'package:zawjati_mobile/features/memory/domain/usecases/get_memories_usecase.dart';
 import 'package:zawjati_mobile/features/memory/domain/usecases/delete_memory_usecase.dart';

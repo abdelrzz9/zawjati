@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:zawjati_mobile/core/errors/failure.dart';
 import 'package:zawjati_mobile/core/usecase/usecase.dart';
 import '../../domain/entities/user_document.dart';
 import '../../domain/usecases/get_documents_usecase.dart';

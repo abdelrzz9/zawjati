@@ -50,15 +50,12 @@ class _NavBarItem extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
-  final int badgeCount;
 
-  // ignore: unused_element_parameter
   const _NavBarItem({
     required this.icon,
     required this.label,
     required this.isSelected,
     required this.onTap,
-    this.badgeCount = 0,
   });
 
   @override
@@ -75,58 +72,7 @@ class _NavBarItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Active pill behind the icon.
-                AnimatedContainer(
-                  duration: AppThemeMetrics.durationFast,
-                  curve: AppThemeMetrics.curveStandard,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppThemeMetrics.spacingMd,
-                    vertical: AppThemeMetrics.spacingXs + 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppThemeColors.primaryAccent.withValues(alpha: 0.14)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(
-                      AppThemeMetrics.radiusPill,
-                    ),
-                  ),
-                  child: Icon(icon, color: color, size: AppThemeMetrics.iconMd),
-                ),
-                if (badgeCount > 0)
-                  Positioned(
-                    top: -2,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: AppThemeColors.error,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppThemeColors.background,
-                          width: AppThemeMetrics.borderThin,
-                        ),
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 16,
-                        minHeight: 16,
-                      ),
-                      child: Text(
-                        badgeCount > 99 ? '99+' : '$badgeCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            Icon(icon, color: color, size: AppThemeMetrics.iconMd),
             const SizedBox(height: AppThemeMetrics.spacingXs),
             Text(
               label,

@@ -42,8 +42,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> implements Listenable {
   // ignore: invalid_use_of_visible_for_testing_member
   void emit(AuthState state) {
     if (!isClosed) {
-      // ignore: invalid_use_of_visible_for_testing_member
       super.emit(state);
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       _notifier.notifyListeners();
     }
   }

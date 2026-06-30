@@ -19,30 +19,6 @@ class MemoryModel extends Memory {
     super.pinned = false,
   });
 
-  MemoryModel._({
-    required String id,
-    required String content,
-    required String userId,
-    required MemoryCategory category,
-    required int importance,
-    required double confidence,
-    required DateTime timestamp,
-    DateTime? lastAccessed,
-    int accessCount = 0,
-    bool pinned = false,
-  }) : super(
-          id: id,
-          content: content,
-          userId: userId,
-          category: category,
-          importance: importance,
-          confidence: confidence,
-          timestamp: timestamp,
-          lastAccessed: lastAccessed,
-          accessCount: accessCount,
-          pinned: pinned,
-        );
-
   factory MemoryModel.fromJson(Map<String, dynamic> json) =>
       _$MemoryModelFromJson(json);
 

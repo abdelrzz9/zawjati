@@ -4,7 +4,6 @@ import 'package:zawjati_mobile/core/network/network_info.dart';
 import '../../domain/entities/memory.dart';
 import '../../domain/repositories/memory_repository.dart';
 import '../datasources/memory_remote_datasource.dart';
-import '../models/memory_model.dart';
 
 class MemoryRepositoryImpl implements MemoryRepository {
   final MemoryRemoteDataSource remoteDataSource;
